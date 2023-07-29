@@ -5,7 +5,7 @@ using namespace std;
 
 int squareRoot(const vector<int>& arr, int s, int e, int value) {
     
-    int mid = s + (e-s)/2;
+    long long int mid = s + (e-s)/2;
     
     if(mid*mid == value){
         
