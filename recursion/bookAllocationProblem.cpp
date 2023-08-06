@@ -1,3 +1,86 @@
+// My solution----
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool isPossible(vector<int>& books, int numStudents, int maxPages) {
+    int studentCount = 1;
+    int pageSum = 0;
+    int n = books.size();
+    //cout << "checking for mid "<< mid <<endl;
+    
+    for(int i = 0; i<n; i++) {
+        if(pageSum + books[i] <= maxPages) {
+            pageSum += books[i];
+        }
+        else
+        {
+            studentCount++;
+            if(studentCount > numStudents || books[i] > maxPages ) {
+                return false;
+            }
+            pageSum = books[i];
+        }
+        if(studentCount > numStudents) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int bookAllocationHelper(vector<int>& books, int numStudents, int left, int right) {
+    if (left > right) {
+        return -1;
+    }
+
+    int mid = left + (right - left) / 2;
+
+    if (isPossible(books, numStudents, mid)) {
+        // If allocation is possible with mid as maximum pages,
+        // try to minimize the maximum pages
+        int leftResult = bookAllocationHelper(books, numStudents, left, mid - 1);
+        if (leftResult != -1) {
+            return leftResult;
+        } else {
+            return mid;
+        }
+    } else {
+        // If allocation is not possible with mid as maximum pages,
+        // try a greater value of maxPages
+        return bookAllocationHelper(books, numStudents, mid + 1, right);
+    }
+}
+
+int bookAllocation(vector<int>& books, int numStudents) {
+    int n = books.size();
+    if (n < numStudents) {
+        return -1; // More students required than books, not possible
+    }
+
+    int totalPages = 0;
+    for (int i = 0; i < n; i++) {
+        totalPages += books[i];
+    }
+
+    int left = 0; // Minimum number of pages a student can read
+    int right = totalPages; // Maximum number of pages a student can read
+    return bookAllocationHelper(books, numStudents, left, right);
+}
+
+int main() {
+    int numStudents=2;
+
+    vector<int> books = {10, 20, 30, 40};
+
+    int result = bookAllocationHelper(books, numStudents, 0, 100);
+    cout << "Minimum number of pages a student needs to read: " << result << endl;
+
+    return 0;
+}
+//------****-----------------------------------------------------
+
+
 #include <iostream>
 #include <vector>
 using namespace std;
